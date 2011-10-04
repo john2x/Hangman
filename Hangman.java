@@ -4,6 +4,7 @@ public class Hangman {
 	private String questionsFilename;
 	private String question;
 	private String category;
+	private int totalTriesAllowed;
 	private int numberOfTries;
 	private int numberOfQuestions;
 	private int[] questionsAlreadyAnswered;
@@ -11,13 +12,14 @@ public class Hangman {
 	private ArrayList<String> questions;
 	private TextFile textFile;
 
-	public Hangman(String questionsFilename){
+	public Hangman(String questionsFilename, int totalTriesAllowed){
 		loadQuestions(questionsFilename);
 		prepareRandomQuestion();
 		numberOfTries = 0;
 		numberOfQuestions = textFile.getNumberOfLines();
 		questionsAlreadyAnswered = new int[numberOfQuestions];
 		triedLetters = new String();
+		this.totalTriesAllowed = totalTriesAllowed;
 	}
 
 	public void loadQuestions(String questionsFilename){
@@ -41,7 +43,7 @@ public class Hangman {
 			if (letterInString(letter, triedLetters)){
 				System.out.print(letter);
 			}else{
-				System.out.print('X');
+				System.out.print('*');
 			}
 		}
 		System.out.println();
@@ -77,6 +79,16 @@ public class Hangman {
 		} else {
 			return false;
 		}
+	}
+
+	/*
+	 * Check if it is game over
+	 */
+	public boolean checkGameOver(){
+		if (numberOfTries >= totalTriesAllowed)
+			return true;
+		else
+			return false;
 	}
 
 	/*
