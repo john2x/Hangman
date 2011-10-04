@@ -53,23 +53,25 @@ public class Hangman {
 	 * Try a letter
 	 */
 	public int tryLetter(char letter){
-		if (letterInString(letter, triedLetters)) {
-			return 0; // letter has already been tried
+		if (numberOfTries < totalTriesAllowed){
+			if (letterInString(letter, triedLetters)) {
+				return 0; // letter has already been tried
+			}
+			if (letterInString(letter, question)){
+				triedLetters += letter;
+				return 1; // letter is correct
+			}
+			numberOfTries += 1;
 		}
-		if (letterInString(letter, question)){
-			triedLetters += letter;
-			return 1; // letter is correct
-		}
-		numberOfTries += 1;
 		return -1; // letter is incorrect
 	}
 
 	/*
 	 * Check if the answer is already correct
 	 */
-	public boolean checkCorrectAnswer(){
+	public boolean isGameWin(){
 		int correct = 0;
-		for (char letter : question.toCharArray()){;
+		for (char letter : question.toCharArray()){
 			if (letterInString(letter, triedLetters)){
 				correct += 1;
 			}
@@ -84,8 +86,8 @@ public class Hangman {
 	/*
 	 * Check if it is game over
 	 */
-	public boolean checkGameOver(){
-		if (numberOfTries >= totalTriesAllowed)
+	public boolean isGameOver(){
+		if (numberOfTries >= totalTriesAllowed && !isGameWin() )
 			return true;
 		else
 			return false;
