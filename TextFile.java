@@ -8,7 +8,7 @@ public class TextFile{
 	private ArrayList<String> contentAsArray;
 
 	public TextFile(String filename){
-		filename = filename;
+		this.filename = filename;
 		contentAsArray = placeContentIntoArray();
 		numberOfLines = contentAsArray.size();
 	}
@@ -16,16 +16,17 @@ public class TextFile{
 	 * Get the content of a text file and place it in an array.
 	 */
 	private ArrayList<String> placeContentIntoArray(){
-		contentAsArray = new ArrayList<String>();
+		ArrayList<String> contents = new ArrayList<String>();
 		try {
-			reader = new Scanner(new File(filename));
+			reader = new Scanner(new File(this.filename));
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found: " + filename);
+			return null;
 		}
 		while (reader.hasNext()){
-			contentAsArray.add(reader.nextLine());
+			contents.add(reader.nextLine());
 		}
-		return contentAsArray;
+		return contents;
 	}
 
 	public String getRandomLine(){
