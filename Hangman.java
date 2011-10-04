@@ -4,6 +4,7 @@ public class Hangman {
 	private String questionsFilename;
 	private String question;
 	private String category;
+	private String clue;
 	private int totalTriesAllowed;
 	private int numberOfTries;
 	private int numberOfQuestions;
@@ -29,10 +30,12 @@ public class Hangman {
 	}
 
 	public void prepareRandomQuestion(){
-		String questionAndCategory = textFile.getRandomLine();
-		int separator = questionAndCategory.indexOf(";");
-		question = questionAndCategory.substring(0, separator);
-		category = questionAndCategory.substring(separator + 1, questionAndCategory.length());
+		String questionCategoryClue = textFile.getRandomLine();
+		int separator = questionCategoryClue.indexOf(";");
+		int separator2 = questionCategoryClue.lastIndexOf(";");
+		question = questionCategoryClue.substring(0, separator);
+		category = questionCategoryClue.substring(separator + 1, separator2);
+		clue = questionCategoryClue.substring(separator2 + 1, questionCategoryClue.length());
 	}
 
 	/*
@@ -110,5 +113,8 @@ public class Hangman {
 	}
 	public String getCategory(){
 		return category;
+	}
+	public String getClue(){
+		return clue;
 	}
 }

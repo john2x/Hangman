@@ -1,4 +1,4 @@
-questionone;category 1
-questiontwo;category 2
-questionthree;category 3
+questionone;category 1;this is a clue 1
+questiontwo;category 2;this is a clue 2
+questionthree;category 3;this is a clue 3
 

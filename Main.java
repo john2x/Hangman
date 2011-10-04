@@ -7,6 +7,7 @@ public class Main
 		hangman = new Hangman("hangman.txt", 4);
 		System.out.println(hangman.getQuestion());
 		System.out.println(hangman.getCategory());
+		System.out.println(hangman.getClue());
 		hangman.printQuestion();
 		System.out.println(hangman.tryLetter('x'));
 		System.out.println(hangman.tryLetter('q'));
