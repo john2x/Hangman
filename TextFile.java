@@ -33,6 +33,10 @@ public class TextFile{
 		return contentAsArray.get((int)(Math.random() * numberOfLines));
 	}
 
+	public String getLine(int lineNumber){
+		return contentAsArray.get(lineNumber);
+	}
+
 	public int getNumberOfLines(){
 		return numberOfLines;
 	}
