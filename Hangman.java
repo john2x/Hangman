@@ -57,6 +57,7 @@ public class Hangman {
 			}
 			if (isGameOver()) {
 				System.out.println("Game Over.");
+				System.out.printf("The answer is: %s\n", question);
 			}
 		}
 	}
