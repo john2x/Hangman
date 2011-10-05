@@ -1,4 +1,4 @@
-questionone;category 1;this is a clue 1
+Data Structure;IT Major Subject;One of the most challenging subject
 questiontwo;category 2;this is a clue 2
 questionthree;category 3;this is a clue 3
 

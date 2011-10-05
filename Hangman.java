@@ -9,7 +9,6 @@ public class Hangman {
 	private int numberOfQuestionsAnswered;
 	private int numberOfTries;
 	private int numberOfQuestions;
-	private int answeredQuestion;
 	private String triedLetters;
 	private String validChars;
 	private ArrayList<String> questions;
@@ -21,29 +20,36 @@ public class Hangman {
 
 		numberOfQuestionsAnswered = 0;
 		numberOfQuestions = textFile.getNumberOfLines();
-		answeredQuestion = 0;
 		questionNumbers = new ArrayList<Integer>();
 		for (int i = 0; i < numberOfQuestions; i++){
 			questionNumbers.add(i);
 		}
 		// shuffle the question numbers so they will be random
 		Collections.shuffle(questionNumbers);
-		validChars = "abcdefghijklmnopqrstuvwxyz";
+		validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		this.totalTriesAllowed = totalTriesAllowed;
 		reset();
 	}
 
 	public void run(){
 		Scanner kb = new Scanner(System.in);
+		reset();
 		prepareNextQuestion();
 		while (!isGameOver()){
+			if (numberOfQuestionsAnswered >= numberOfQuestions)
+				break;
+
 			System.out.println("============================================");
 			System.out.printf("Category: %s\n", category);
 			System.out.printf("Clue: %s\n", clue);
-			System.out.printf("Tries left: %d\n", totalTriesAllowed - numberOfTries);
+			System.out.printf("Tries left: %d\n\n", totalTriesAllowed - numberOfTries);
+
 			printQuestion();
-			System.out.print("Guess a letter: ");
+
+			System.out.print("\nGuess a letter: ");
+
 			char letter = kb.nextLine().charAt(0);
+
 			if (isLetterInString(letter, validChars)){
 				// Try the letter if its correct/incorrect
 				switch (tryLetter(letter)) {
@@ -55,23 +61,28 @@ public class Hangman {
 			} else {
 				System.out.println("Invalid character. ");
 			}
+
 			if (isAnswerCorrect()) {
-				System.out.println("Congratulations! You answered that correctly. ");
+				System.out.println("\nCongratulations! You answered that correctly. ");
 				System.out.printf("The answer is: %s\n", question);
-				answeredQuestion += 1;
+				numberOfQuestionsAnswered += 1;
 				reset();
-				prepareNextQuestion();
+				if (numberOfQuestionsAnswered < numberOfQuestions)
+					prepareNextQuestion();
 			}
-			if (isGameOver()) {
-				System.out.println("Game Over.");
-				System.out.printf("The answer is: %s\n", question);
-			}
+		}
+		if (isGameOver()){
+			System.out.println("\nGame Over.");
+			System.out.printf("The answer is: %s\n", question);
+		} else {
+			System.out.println("You answered all questions correctly. ");
 		}
 	}
 
 	private void reset(){
 		numberOfTries = 0;
 		triedLetters = new String();
+		triedLetters = " _-";
 	}
 
 	public void loadQuestions(String questionsFilename){
@@ -81,7 +92,7 @@ public class Hangman {
 	}
 
 	public void prepareNextQuestion(){
-		prepareQuestion(questionNumbers.get(answeredQuestion));
+		prepareQuestion(questionNumbers.get(numberOfQuestionsAnswered));
 	}
 
 	public void prepareQuestion(int questionNumber){
@@ -154,8 +165,11 @@ public class Hangman {
 	 * Function to check if a letter is in a String
 	 */
 	public boolean isLetterInString(char letter, String str){
-		for (char c : str.toCharArray()){
-			if (c - 65 == letter - 65){
+		if (letter >= 97 && letter <= 122){
+			letter -= 32;
+		}
+		for (char c : str.toUpperCase().toCharArray()){
+			if (c == letter){
 				return true;
 			}
 		}
