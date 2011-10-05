@@ -9,30 +9,34 @@ public class Hangman {
 	private int numberOfQuestionsAnswered;
 	private int numberOfTries;
 	private int numberOfQuestions;
-	private int[] answeredQuestions;
+	private int answeredQuestion;
 	private String triedLetters;
 	private String validChars;
 	private ArrayList<String> questions;
+	private ArrayList<Integer> questionNumbers;
 	private TextFile textFile;
 
 	public Hangman(String questionsFilename, int totalTriesAllowed){
 		loadQuestions(questionsFilename);
-		prepareRandomQuestion();
-		numberOfTries = 0;
+
 		numberOfQuestionsAnswered = 0;
 		numberOfQuestions = textFile.getNumberOfLines();
-		answeredQuestions = new int[numberOfQuestions];
+		answeredQuestion = 0;
+		questionNumbers = new ArrayList<Integer>();
 		for (int i = 0; i < numberOfQuestions; i++){
-			answeredQuestions[i] = -1;
+			questionNumbers.add(i);
 		}
+		// shuffle the question numbers so they will be random
+		Collections.shuffle(questionNumbers);
 		validChars = "abcdefghijklmnopqrstuvwxyz";
-		triedLetters = new String();;
 		this.totalTriesAllowed = totalTriesAllowed;
+		reset();
 	}
 
 	public void run(){
 		Scanner kb = new Scanner(System.in);
-		while (!isAnswerCorrect() && !isGameOver()){
+		prepareNextQuestion();
+		while (!isGameOver()){
 			System.out.println("============================================");
 			System.out.printf("Category: %s\n", category);
 			System.out.printf("Clue: %s\n", clue);
@@ -54,6 +58,9 @@ public class Hangman {
 			if (isAnswerCorrect()) {
 				System.out.println("Congratulations! You answered that correctly. ");
 				System.out.printf("The answer is: %s\n", question);
+				answeredQuestion += 1;
+				reset();
+				prepareNextQuestion();
 			}
 			if (isGameOver()) {
 				System.out.println("Game Over.");
@@ -62,14 +69,22 @@ public class Hangman {
 		}
 	}
 
+	private void reset(){
+		numberOfTries = 0;
+		triedLetters = new String();
+	}
+
 	public void loadQuestions(String questionsFilename){
 		this.questionsFilename = questionsFilename;
 		this.textFile = new TextFile(this.questionsFilename);
 		this.questions = textFile.getContentAsArray();
 	}
 
-	public void prepareRandomQuestion(){
-		int questionNumber = (int)(Math.random() * numberOfQuestions);
+	public void prepareNextQuestion(){
+		prepareQuestion(questionNumbers.get(answeredQuestion));
+	}
+
+	public void prepareQuestion(int questionNumber){
 		String questionCategoryClue = textFile.getLine(questionNumber);
 		int separator = questionCategoryClue.indexOf(";");
 		int separator2 = questionCategoryClue.lastIndexOf(";");
@@ -77,7 +92,6 @@ public class Hangman {
 		category = questionCategoryClue.substring(separator + 1, separator2);
 		clue = questionCategoryClue.substring(separator2 + 1, questionCategoryClue.length());
 	}
-
 	/*
 	 * Prints the question while hiding the characters which have not been guessed yet
 	 */
@@ -86,7 +100,7 @@ public class Hangman {
 			if (isLetterInString(letter, triedLetters)){
 				System.out.print(letter);
 			}else{
-				System.out.print('*');
+				System.out.print('x');
 			}
 		}
 		System.out.println();
@@ -142,18 +156,6 @@ public class Hangman {
 	public boolean isLetterInString(char letter, String str){
 		for (char c : str.toCharArray()){
 			if (c - 65 == letter - 65){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/*
-	 * Function to check if a question number has already been answered
-	 */
-	public boolean isQuestionDone(int questionNumber){
-		for (int i = 0; i < answeredQuestions.length; i++){
-			if (questionNumber == answeredQuestions[i]){
 				return true;
 			}
 		}
