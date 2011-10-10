@@ -35,7 +35,7 @@ public class Hangman {
 		Scanner kb = new Scanner(System.in);
 		reset();
 		prepareNextQuestion();
-		while (!isGameOver()){
+		while (!isGameOver() && numberOfQuestionsAnswered < numberOfQuestions){
 			if (numberOfQuestionsAnswered >= numberOfQuestions)
 				break;
 
