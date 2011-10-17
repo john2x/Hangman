@@ -69,6 +69,8 @@ public class Hangman {
 				reset();
 				if (numberOfQuestionsAnswered < numberOfQuestions)
 					prepareNextQuestion();
+				else
+					break;
 			}
 		}
 		if (isGameOver()){
