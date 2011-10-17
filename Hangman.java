@@ -40,6 +40,7 @@ public class Hangman {
 				break;
 
 			System.out.println("============================================");
+			System.out.println("0 to quit");
 			System.out.printf("Category: %s\n", category);
 			System.out.printf("Clue: %s\n", clue);
 			System.out.printf("Tries left: %d\n\n", totalTriesAllowed - numberOfTries);
@@ -49,6 +50,10 @@ public class Hangman {
 			System.out.print("\nGuess a letter: ");
 
 			char letter = kb.nextLine().charAt(0);
+
+			if (letter == '0') {
+				return;
+			}
 
 			if (isLetterInString(letter, validChars)){
 				// Try the letter if its correct/incorrect

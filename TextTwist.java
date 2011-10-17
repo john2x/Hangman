@@ -40,6 +40,7 @@ public class TextTwist {
 		while (!isGameOver()){
 
 			System.out.println("============================================");
+			System.out.println("0 to quit");
 			System.out.printf("Score: %d\n", score);
 			printQuestion();
 
@@ -47,6 +48,9 @@ public class TextTwist {
 
 			String word = kb.nextLine();
 
+			if (word.equals("0")) {
+				return;
+			}
 			switch (tryWord(word)) {
 				case 0: System.out.println("Word already tried."); break;
 				case 1: System.out.println("Correct!"); 
